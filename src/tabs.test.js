@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { DEFAULT_TAB, TABS, parseTab } from './tabs.js'
+import { DEFAULT_TAB, TABS, parseTab, tabForShortcut } from './tabs.js'
 
 describe('parseTab', () => {
   it('returns valid ids from hash', () => {
@@ -21,3 +21,19 @@ describe('parseTab', () => {
     expect(DEFAULT_TAB).toBe('home')
   })
 })
+
+describe('tabForShortcut', () => {
+  it('maps digit keys to tabs in navbar order', () => {
+    expect(tabForShortcut('Digit1')).toBe('home')
+    expect(tabForShortcut('Digit2')).toBe('experience')
+    expect(tabForShortcut('Digit6')).toBe('cv')
+    expect(tabForShortcut('Numpad3')).toBe('projects')
+  })
+  it('returns null for keys without a tab', () => {
+    expect(tabForShortcut('Digit0')).toBeNull()
+    expect(tabForShortcut('Digit7')).toBeNull()
+    expect(tabForShortcut('KeyA')).toBeNull()
+    expect(tabForShortcut('')).toBeNull()
+  })
+})
+
