@@ -6,8 +6,6 @@
 
 Email: santiago.jonas.s.0407@gmail.com
 LinkedIn: https://www.linkedin.com/in/jonassantiago47/
-YouTube: https://www.youtube.com/c/HeyImJonasDNSEA/
-
 ---
 
 ## Summary
