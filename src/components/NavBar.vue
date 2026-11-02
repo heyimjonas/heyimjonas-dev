@@ -1,7 +1,10 @@
 <script setup>
 import { TABS } from '../tabs.js'
 
-defineProps({ active: { type: String, required: true } })
+defineProps({
+  active: { type: String, required: true },
+  showKeys: { type: Boolean, default: false },
+})
 defineEmits(['select'])
 
 import { LINKEDIN_URL } from '../data/links.js'
@@ -12,14 +15,16 @@ import { LINKEDIN_URL } from '../data/links.js'
     <span class="brand mono">&lt;Jonas /&gt;</span>
     <nav class="tabs" aria-label="Sections">
       <button
-        v-for="tab in TABS"
+        v-for="(tab, i) in TABS"
         :key="tab.id"
         type="button"
         class="tab mono"
         :class="{ on: tab.id === active }"
         :aria-current="tab.id === active ? 'page' : undefined"
+        :aria-keyshortcuts="'Alt+' + (i + 1)"
         @click="$emit('select', tab.id)"
       >
+        <kbd class="key" :class="{ show: showKeys }" aria-hidden="true">{{ i + 1 }}</kbd>
         {{ tab.label }}
       </button>
     </nav>
@@ -64,6 +69,36 @@ import { LINKEDIN_URL } from '../data/links.js'
     color 0.3s ease,
     box-shadow 0.35s ease,
     background-color 0.3s ease;
+}
+.tab {
+  position: relative;
+}
+/* number box layered in front of the label while Alt is held */
+.key {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  min-width: 24px;
+  padding: 0 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--panel) 85%, transparent);
+  color: var(--text);
+  font: 700 14px/22px var(--mono);
+  text-align: center;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+.key.show {
+  opacity: 1;
+}
+@media (max-width: 899px) {
+  .key {
+    display: none;
+  }
 }
 .tab:hover {
   color: var(--text);
@@ -176,6 +211,7 @@ import { LINKEDIN_URL } from '../data/links.js'
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .key,
   .tab,
   .linkedin {
     transition: none;
